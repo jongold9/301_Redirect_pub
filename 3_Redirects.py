@@ -32,11 +32,10 @@ def format_https_rewrite_rule(from_path, to_url):
     from_path = from_path.strip("/")
     match = re.match(r'https?://[^/]+(/.*)?', to_url)
     if not match:
-        raise ValueError(f"Некорректный URL: {to_url}")
+        raise ValueError(f"Invalid URL: {to_url}")
     
-    path = match.group(1) or "/"  # Извлекаем путь из to_url
+    path = match.group(1) or "/"  # Extract the path from to_url
     return f"RewriteRule ^{from_path}/?$ https://%{{HTTP_HOST}}{path} [R=301,L]\n"
-
 
 if __name__ == "__main__":
     from_file_path = '1_From_urls.txt'
@@ -47,15 +46,15 @@ if __name__ == "__main__":
     to_urls = read_urls(to_file_path)
 
     if len(from_urls) != len(to_urls):
-        print("Списки URL-адресов имеют разную длину")
+        print("The URL lists have different lengths.")
     else:
-        print("Выберите тип редиректа:")
+        print("Choose the type of redirect:")
         print("1 - Redirect 301")
         print("2 - RewriteRule")
-        print("3 - RewriteRule с подпутями")
-        print("4 - Перенаправление директории с сохранением пути подпапок")
+        print("3 - RewriteRule with subpaths")
+        print("4 - Directory redirection with subpath preservation")
         print("5 - HTTPS RewriteRule")
-        redirect_type = input("Введите номер: ")
+        redirect_type = input("Enter the number: ")
 
         with open(output_file_path, 'w') as output_file:
             for from_url, to_url in zip(from_urls, to_urls):
@@ -72,4 +71,4 @@ if __name__ == "__main__":
                     redirect = format_https_rewrite_rule(from_path, to_url)
                 output_file.write(redirect)
 
-        print(f"Результаты редиректов сохранены в файл: {output_file_path}")
+        print(f"Redirect results have been saved to: {output_file_path}")
