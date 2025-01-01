@@ -1,0 +1,1 @@
+RewriteRule ^example.com/1/?$ https://%{HTTP_HOST}/example.com/2/ [R=301,L]
